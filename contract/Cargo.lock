@@ -425,6 +425,7 @@ version = "1.0.0"
 dependencies = [
  "json",
  "near-sdk",
+ "serde_json",
  "uint",
 ]
 

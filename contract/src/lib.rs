@@ -1,6 +1,10 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{log, near_bindgen, env, AccountId};
+use near_sdk::{log, near_bindgen, env, AccountId, Promise, Gas, Balance};
 use json::{parse};
+use serde_json::json;
+
+const DEPOSIT: u128 = 1;
+const CALL_GAS: Gas = Gas(5_000_000_000_000);
 
 // Define the contract structure
 #[near_bindgen]
@@ -60,6 +64,18 @@ impl Contract {
         if account_id.to_string() == "upi05.testnet".to_string() {
             self.verified_candidates.retain(|x| * x != candidate);
         }
+    }
+
+    // donate
+    // Call this function to trigger token widthdraw process from donation pool
+    pub fn donate_trigger(&self, amount: String) {
+        let args = json!({
+            "receiver_id": "test1.upi05.testnet".to_string(),
+            "amount":  amount
+        }) .to_string().into_bytes().to_vec();
+
+        Promise::new("dev-1663407143254-90994928167650".parse().unwrap())
+        .function_call("ft_transfer".to_string(), args, DEPOSIT, CALL_GAS);
     }
 }
 
