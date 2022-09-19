@@ -102,7 +102,7 @@ impl Contract {
     // Call this function to trigger token widthdraw process from donation pool
     pub fn donate(&mut self) {
         if env::signer_account_id().to_string() == VALIDATOR_ACCOUNT.to_string() {
-                
+            
             let verified_candidates: Vec<String> = self.get_verified_candidates();
             
             for i in 0..verified_candidates.len() {
