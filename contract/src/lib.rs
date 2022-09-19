@@ -3,8 +3,9 @@ use near_sdk::{log, near_bindgen, env, AccountId, PromiseError, Promise, Gas, Ba
 use json::{parse};
 use serde_json::{Value, json, from_str};
 
-const DEPOSIT: u128 = 3;
 const CALL_GAS: Gas = Gas(10_000_000_000_000);
+const Token_SC_Addr: &str = "dev-1663407143254-90994928167650";
+const Validator_Account: &str = "upi05.testnet";
 
 // Define the contract structure
 #[near_bindgen]
@@ -36,7 +37,7 @@ impl Contract {
             "account_id": env::current_account_id()
         }) .to_string().into_bytes().to_vec();
 
-        let promise = Promise::new("dev-1663407143254-90994928167650".parse().unwrap())
+        let promise = Promise::new(Token_SC_Addr.parse().unwrap())
             .function_call("ft_balance_of".to_string(), args.clone(), 1, CALL_GAS);
         promise.then(
             Promise::new(env::current_account_id())
@@ -75,12 +76,14 @@ impl Contract {
     pub fn set_verified_candidate(&mut self, candidate: String) {
         let account_id = env::signer_account_id();
         
-        if account_id.to_string() == "upi05.testnet".to_string() {
+        if account_id.to_string() == Validator_Account.to_string() {
             // Set MAX_COIN before pushing
-            self.verified_candidates.push(candidate.clone());
+            let mut verfied_candidate: Value = serde_json::from_str(&candidate).unwrap();
+            verfied_candidate["donatedAmount"] = json!(200);
+            self.verified_candidates.push(serde_json::to_string(&verfied_candidate).unwrap());
             self.remove_candidate(candidate);
 
-        }        
+        }
     }
     
     pub fn get_verified_candidates(&mut self) -> Vec<String> {
@@ -89,7 +92,7 @@ impl Contract {
 
     pub fn remove_verified_candidate(&mut self, candidate: String) {
         let account_id = env::signer_account_id();
-        if account_id.to_string() == "upi05.testnet".to_string() {
+        if account_id.to_string() == Validator_Account.to_string() {
             self.verified_candidates.retain(|x| * x != candidate);
         }
     }
@@ -97,29 +100,31 @@ impl Contract {
     // donate
     // Call this function to trigger token widthdraw process from donation pool
     pub fn donate(&mut self) {
-        
-        let candidate: Value = serde_json::from_str(&self.verified_candidates[0]).unwrap();
-        
-        let verified_candidates: Vec<String> = self.get_verified_candidates();
-        
-        for i in 0..verified_candidates.len() {
-            self.get_pool_balance();
+        if env::signer_account_id().to_string() == Validator_Account.to_string() {
+                
+            let candidate: Value = serde_json::from_str(&self.verified_candidates[0]).unwrap();
+            
+            let verified_candidates: Vec<String> = self.get_verified_candidates();
+            
+            for i in 0..verified_candidates.len() {
+                self.get_pool_balance();
 
-            let candidate: Value = serde_json::from_str(&verified_candidates[i]).unwrap();
+                let candidate: Value = serde_json::from_str(&verified_candidates[i]).unwrap();
 
-            let donatedAmount: u128 = candidate["donatedAmount"].to_string().parse().unwrap();
+                let donatedAmount: u128 = candidate["donatedAmount"].to_string().replace("\"", "").parse().unwrap();
 
-            if donatedAmount + 1000 <= self.pool_balance {
-                let args = json!({
-                    "receiver_id": candidate["publicKey"].to_string().replace("\"", ""),
-                    "amount": candidate["donatedAmount"].to_string()
-                }).to_string().into_bytes().to_vec();
-                Promise::new("dev-1663407143254-90994928167650".parse().unwrap())
-                .function_call("ft_transfer".to_string(), args, 1, CALL_GAS);
+                if donatedAmount + 1000 <= self.pool_balance {
+                    let args = json!({
+                        "receiver_id": candidate["publicKey"].to_string().replace("\"", ""),
+                        "amount": candidate["donatedAmount"].to_string().replace("\"", "")
+                    }).to_string().into_bytes().to_vec();
+                    Promise::new(Token_SC_Addr.parse().unwrap())
+                    .function_call("ft_transfer".to_string(), args, 1, CALL_GAS);
 
-                self.remove_verified_candidate(verified_candidates[i].clone());
-            } else {
-                break;
+                    self.remove_verified_candidate(verified_candidates[i].clone());
+                } else {
+                    break;
+                }
             }
         }
     }
