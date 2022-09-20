@@ -37,9 +37,11 @@ impl Contract {
         let args = json!({
             "account_id": env::current_account_id()
         }) .to_string().into_bytes().to_vec();
+        // why does we convert args to vector and use json here?
 
         let promise = Promise::new(TOKEN_SC_ADDR.parse().unwrap())
             .function_call("ft_balance_of".to_string(), args.clone(), 1, CALL_GAS);
+            //why does CALL_GAS appear here and set to 10M? 
         promise.then(
             Promise::new(env::current_account_id())
             .function_call("get_pool_balance_callback".to_string(), args, 0, CALL_GAS)
@@ -50,7 +52,7 @@ impl Contract {
     pub fn get_pool_balance_callback(&mut self, #[callback_result] call_result: Result<String, PromiseError>) {
         // Check if the promise succeeded by calling the method outlined in external.rs
         if call_result.is_err() {
-          log!("There was an error contacting NEAR");
+          log!("There was an error while contacting NEAR");
         } else {
             let res: String = call_result.unwrap();
             self.pool_balance = res.parse().unwrap();
@@ -60,7 +62,7 @@ impl Contract {
     // candidates
     pub fn set_candidate(&mut self, candidate: String) {
         parse(&candidate).expect("Wrong format!");
-
+        // why use parse(candidate) substitute for cadidate.parse()?
         self.candidates.push(candidate);
     }
     
@@ -100,6 +102,7 @@ impl Contract {
 
     // donate
     // Call this function to trigger token widthdraw process from donation pool
+    #[payable]
     pub fn donate(&mut self) {
         if env::signer_account_id().to_string() == VALIDATOR_ACCOUNT.to_string() {
             

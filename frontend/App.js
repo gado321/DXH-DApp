@@ -1,5 +1,8 @@
 import 'regenerator-runtime/runtime';
 import React from 'react';
+import Form from './components/Form';
+import SignIn from './components/SignIn';
+import Messages from './components/Messages';
 
 import './assets/global.css';
 
