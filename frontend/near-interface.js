@@ -2,7 +2,7 @@
 
 import { utils } from 'near-api-js'
 
-export class Contract {
+export default class Contract {
 
   constructor({ contractId, walletToUse }) {
     this.contractId = contractId;
@@ -10,11 +10,11 @@ export class Contract {
   }
 
   async getCandidates() {
-    return await this.wallet.viewMethod({contractId: this.contractId, method: "get_candidates"});
+    return await this.wallet.callMethod({contractId: this.contractId, method: "get_candidates"});
   }
 
   async getVerifiedCandidates() {
-    return await this.wallet.viewMethod({contractId: this.contractId, method: "get_verified_candidates"});
+    return await this.wallet.callMethod({contractId: this.contractId, method: "get_verified_candidates"});
   }
 
   async setCandidate(rawCandidate, maxToken) {
