@@ -35,3 +35,5 @@ yarn-error.log*
 **/target
 **/neardev
 .parcel-cache
+frontend/.cache
+frontend/dist
