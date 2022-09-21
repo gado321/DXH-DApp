@@ -1,19 +1,15 @@
-import { signInWithNearWallet, signOutNearWallet } from './near-api';
+import { signIn, signOut } from './near-wallet';
 import React from 'react';
 
-export function SignInPrompt({greeting}) {
+export function SignInPrompt() {
   return (
     <main>
-      <h1>
-        The contract says: <span className="greeting">{greeting}</span>
-      </h1>
       <h3>
-        Welcome to NEAR!
+        Welcome to DXH Token donation!
       </h3>
       <p>
-        Your contract is storing a greeting message in the NEAR blockchain. To
-        change it you need to sign in using the NEAR Wallet. It is very simple,
-        just use the button below.
+        Your token will be store in our pool in NEAR blockchain. After login, you will
+        choose how much token for donating to our project. We will share equally to all verified candidates
       </p>
       <p>
         Do not worry, this app runs in the test network ("testnet"). It works
@@ -22,7 +18,7 @@ export function SignInPrompt({greeting}) {
       </p>
       <br/>
       <p style={{ textAlign: 'center' }}>
-        <button onClick={signInWithNearWallet}>Sign in with NEAR Wallet</button>
+        <button onClick={signIn}>Sign in with NEAR Wallet</button>
       </p>
     </main>
   );
@@ -30,7 +26,7 @@ export function SignInPrompt({greeting}) {
 
 export function SignOutButton({accountId}) {
   return (
-    <button style={{ float: 'right' }} onClick={signOutNearWallet}>
+    <button style={{ float: 'right' }} onClick={signOut}>
       Sign out {accountId}
     </button>
   );

@@ -3,7 +3,6 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import ReactDOM from 'react-dom';
-//import { initContract } from './near-api';
 
 // NEAR import
 import { Contract } from './near-interface';
@@ -21,7 +20,7 @@ window.onload = async () => {
   const isSignedIn = await wallet.startUp()
  
   ReactDOM.render(
-    <App isSignedIn={isSignedIn} Donation={Donation} wallet={wallet} />,
+    <App isSignedIn={isSignedIn} wallet={wallet} />,
     document.getElementById('root')
   );
 }
