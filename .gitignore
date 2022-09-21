@@ -34,3 +34,4 @@ yarn-error.log*
 
 **/target
 **/neardev
+.parcel-cache

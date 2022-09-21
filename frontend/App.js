@@ -6,22 +6,20 @@ import './assets/global.css';
 import { EducationalText, SignInPrompt, SignOutButton } from './ui-components';
 
 
-export default function App() {
-
+export default function App(props) {
   /// If user not signed-in with wallet - show prompt
-  if (!window.walletConnection.isSignedIn()) {
+  if (!props.isSignedIn) {
     // Sign-in flow will reload the page later
-    return <SignInPrompt/>;
+    return <SignInPrompt wallet={props.wallet}/>;
   }
 
   return (
     <>
-      <SignOutButton accountId={window.accountId}/>
-      <main className={uiPleaseWait ? 'please-wait' : ''}>
+      <SignOutButton wallet={props.wallet}/>
+      <main className={true ? 'please-wait' : ''}>
         <h1>
           Thanks for donating!
         </h1>
-        <EducationalText/>
       </main>
     </>
   );

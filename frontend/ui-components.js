@@ -1,7 +1,6 @@
-import { signIn, signOut } from './near-wallet';
 import React from 'react';
 
-export function SignInPrompt() {
+export function SignInPrompt(props) {
   return (
     <main>
       <h3>
@@ -18,16 +17,16 @@ export function SignInPrompt() {
       </p>
       <br/>
       <p style={{ textAlign: 'center' }}>
-        <button onClick={signIn}>Sign in with NEAR Wallet</button>
+        <button onClick={() => props.wallet.signIn()}>Sign in with NEAR Wallet</button>
       </p>
     </main>
   );
 }
 
-export function SignOutButton({accountId}) {
+export function SignOutButton(props) {
   return (
-    <button style={{ float: 'right' }} onClick={signOut}>
-      Sign out {accountId}
+    <button style={{ float: 'right' }} onClick={() => props.wallet.signOut()}>
+      Sign out {props.wallet.getAccountId()}
     </button>
   );
 }

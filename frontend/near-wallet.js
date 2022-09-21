@@ -51,6 +51,10 @@ export class Wallet {
     return isSignedIn;
   }
 
+  getAccountId() {
+    return this.accountId;
+  }
+
   // Sign-in method
   signIn() {
     const description = 'Please select a wallet to sign in.';

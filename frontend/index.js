@@ -13,7 +13,7 @@ import { Wallet } from './near-wallet'
 const wallet = new Wallet({ createAccessKeyFor: process.env.CONTRACT_NAME })
 
 // Abstract the logic of interacting with the contract to simplify your flow
-const guestBook = new Contract({ contractId: process.env.CONTRACT_NAME, walletToUse: wallet });
+//const guestBook = new Contract({ contractId: process.env.CONTRACT_NAME, walletToUse: wallet });
 
 // Setup on page load
 window.onload = async () => {
