@@ -1,4 +1,5 @@
 import React from "react";
+import { async } from "regenerator-runtime";
 import Contract from "./near-interface";
 
 export function SignInPrompt(props) {
@@ -8,7 +9,7 @@ export function SignInPrompt(props) {
       <p>
         Your token will be store in our pool in NEAR blockchain. After login,
         you will choose how much token for donating to our project. We will
-        share equally to all verified candidates
+        share equally to all verified candidates.
       </p>
       <p>
         Do not worry, this app runs in the test network ("testnet"). It works
@@ -17,7 +18,7 @@ export function SignInPrompt(props) {
       </p>
       <br />
       <p style={{ textAlign: "center" }}>
-        <button onClick={() => props.wallet.signIn()}>
+        <button className="login-class" onClick={() => props.wallet.signIn()}>
           Sign in with NEAR Wallet
         </button>
       </p>
@@ -25,75 +26,63 @@ export function SignInPrompt(props) {
   );
 }
 
+
+
 export function SignOutButton(props) {
-  <button style={{ float: "right" }} onClick={() => props.wallet.signOut()}>
+  return <button className="login-class" style={{ float: "right" }} onClick={() => props.wallet.signOut()}>
     Sign out {props.wallet.getAccountId()}
   </button>;
+}
 
-  /*
+
+export function GetCandidate(props) {
   const ct = new Contract({
     contractId: process.env.CONTRACT_NAME,
     walletToUse: props.wallet
   });
   return (
-    <button
-      style={{ float: "right" }}
+    <button className="loginClass"
+      //style={{ float: "left", padding: "20px" }}
       onClick={async () => {
         const res = await ct.getCandidates();
         const plain = Buffer.from(res.receipts_outcome[0].outcome.status.SuccessValue, 'base64').toString('utf8');
         console.info(plain)
       }}
     >
-      Sign out {props.wallet.getAccountId()}
+      check {props.wallet.getAccountId()}
     </button>
   );
-  */
 }
 
-export function EducationalText() {
+export function GetVerifiedCandidate(props) {
+  const ct = new Contract({
+    contractId: process.env.CONTRACT_NAME,
+    walletToUse: props.wallet
+  });
   return (
-    <>
-      <p>
-        Look at that! A Hello World app! This greeting is stored on the NEAR
-        blockchain. Check it out:
-      </p>
-      <ol>
-        <li>
-          Look in <code>src/App.js</code> and <code>src/utils.js</code> – you'll
-          see <code>get_greeting</code> and <code>set_greeting</code> being
-          called on <code>contract</code>. What's this?
-        </li>
-        <li>
-          Ultimately, this <code>contract</code> code is defined in{" "}
-          <code>assembly/main.ts</code> – this is the source code for your{" "}
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://docs.near.org/docs/develop/contracts/overview"
-          >
-            smart contract
-          </a>
-          .
-        </li>
-        <li>
-          When you run <code>npm run dev</code>, the code in{" "}
-          <code>assembly/main.ts</code> gets deployed to the NEAR testnet. You
-          can see how this happens by looking in <code>package.json</code> at
-          the <code>scripts</code> section to find the <code>dev</code> command.
-        </li>
-      </ol>
-      <hr />
-      <p>
-        To keep learning, check out{" "}
-        <a target="_blank" rel="noreferrer" href="https://docs.near.org">
-          the NEAR docs
-        </a>{" "}
-        or look through some{" "}
-        <a target="_blank" rel="noreferrer" href="https://examples.near.org">
-          example apps
-        </a>
-        .
-      </p>
-    </>
+    <button className="loginClass"
+      style={{ padding: "20px" }}
+      onClick={async () => {
+        const res = await ct.getVerifiedCandidates();
+        const plain = Buffer.from(res.receipts_outcome[0].outcome.status.SuccessValue, 'base64').toString('utf8');
+        console.info(plain)
+      }}
+    >
+      check {props.wallet.getAccountId()}
+    </button>
+  );
+}
+
+export function DonateButton(props) {
+  const ct = new Contract({
+    contractId: process.env.CONTRACT_NAME,
+    walletToUse: props.wallet
+  });
+  return (
+    <div style={ {float: "left", padding: "20px"} }>
+      onClick={ async () => { 
+        const res = await ct.donate();
+    }}
+    </div>
   );
 }
