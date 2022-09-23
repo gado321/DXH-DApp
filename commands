@@ -9,3 +9,7 @@ near call dev-1663407143254-90994928167650 ft_transfer '{"receiver_id": "dev-166
 near call $CONTRACT_NAME donate  --accountId upi05.testnet --gas=300000000000000
 
 near call $CONTRACT_NAME get_candidates --accountId upi05.testnet
+
+near call dev-1663407143254-90994928167650 ft_balance_of '{"account_id": "dxh.testnet"}' --accountId upi05.testnet
+
+near call dev-1663407143254-90994928167650 ft_balance_of '{"account_id": "dxh.testnet"}' --accountId upi05.testnet
