@@ -1,6 +1,4 @@
 import React from "react";
-import { async } from "regenerator-runtime";
-import Contract from "./near-interface";
 
 export function SignInPrompt(props) {
   return (
@@ -36,18 +34,10 @@ export function SignOutButton(props) {
 
 
 export function GetCandidate(props) {
-  const ct = new Contract({
-    contractId: process.env.CONTRACT_NAME,
-    walletToUse: props.wallet
-  });
+  
   return (
     <button className="loginClass"
       //style={{ float: "left", padding: "20px" }}
-      onClick={async () => {
-        const res = await ct.getCandidates();
-        const plain = Buffer.from(res.receipts_outcome[0].outcome.status.SuccessValue, 'base64').toString('utf8');
-        console.info(plain)
-      }}
     >
       check {props.wallet.getAccountId()}
     </button>

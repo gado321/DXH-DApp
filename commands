@@ -7,3 +7,5 @@ near call dev-1663407143254-90994928167650 storage_deposit '{"account_id": "dev-
 near call dev-1663407143254-90994928167650 ft_transfer '{"receiver_id": "dev-1663525716207-50298369999460", "amount": "500000"}' --accountId test1.upi05.testnet --depositYocto 1
 
 near call $CONTRACT_NAME donate  --accountId upi05.testnet --gas=300000000000000
+
+near call $CONTRACT_NAME get_candidates --accountId upi05.testnet

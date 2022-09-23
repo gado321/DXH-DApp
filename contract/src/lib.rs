@@ -6,7 +6,7 @@ use serde_json::{Value, json, from_str};
 const CALL_GAS: Gas = Gas(10_000_000_000_000);
 const TOKEN_SC_ADDR: &str = "dev-1663407143254-90994928167650";
 const VALIDATOR_ACCOUNT: &str = "upi05.testnet";
-const POOL_AMOUNT_MIN: u128 = 1000;
+const POOL_AMOUNT_MIN: u128 = 10;
 
 // Define the contract structure
 #[near_bindgen]
@@ -66,7 +66,7 @@ impl Contract {
         self.candidates.push(candidate);
     }
     
-    pub fn get_candidates(&mut self) -> Vec<String> {
+    pub fn get_candidates(&self) -> Vec<String> {
         self.candidates.clone()
     }
 
@@ -89,7 +89,7 @@ impl Contract {
         }
     }
     
-    pub fn get_verified_candidates(&mut self) -> Vec<String> {
+    pub fn get_verified_candidates(&self) -> Vec<String> {
         self.verified_candidates.clone()
     }
 
